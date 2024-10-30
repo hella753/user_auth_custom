@@ -19,10 +19,22 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         *UserAdmin.fieldsets,
         (
-            'Added Fieldset',
+            'For Activity',
             {
                 'fields': (
                     'last_active_datetime',
+                )
+            }
+        ),
+        (
+            'For Orders and Contacting',
+            {
+                'fields': (
+                    'order_address',
+                    'city',
+                    'country',
+                    'postcode',
+                    'mobile'
                 )
             }
         )
