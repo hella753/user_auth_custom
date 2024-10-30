@@ -1,12 +1,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from order.models import CartItems
+from order.models import CartItem
 from store.models import Product
 
 
 class CartItemForm(forms.ModelForm):
     class Meta:
-        model = CartItems
+        model = CartItem
         fields = ['product', 'product_quantity']
 
     def clean(self):

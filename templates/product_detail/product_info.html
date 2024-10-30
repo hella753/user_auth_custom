@@ -6,8 +6,10 @@
         </a>
     </div>
 </div>
+
 <div class="col-lg-6">
     <form action="{% url "order:add_to_cart" %}" method="POST">
+        {% csrf_token %}
         <input type="hidden" name="product" value="{{ product.id }}">
         <h4 class="fw-bold mb-3">{{ product.product_name }}</h4>
         <p class="mb-3">Category: {{ product.product_category.first.category_name }}</p>
@@ -23,7 +25,6 @@
             humour, or non-characteristic words etc.</p>
         <p class="mb-4">{{ product.product_description }}</p>
 
-        {% csrf_token %}
         <div class="input-group quantity mb-5" style="width: 100px;">
             <div class="input-group-btn">
                 <button type="button" class="btn btn-sm btn-minus rounded-circle bg-light border">

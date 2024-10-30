@@ -1,8 +1,8 @@
 from django.contrib import admin
-from order.models import Checkout, Cart, CartItems
+from order.models import Checkout, Cart, CartItem
 
 
-@admin.register(CartItems)
+@admin.register(CartItem)
 class CartItemsAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'product_quantity', 'cart' )
     list_prefetch_related = ('product', 'cart')

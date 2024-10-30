@@ -6,15 +6,15 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, ListView
 from order.forms import CartItemForm
-from order.models import Cart, CartItems
+from order.models import Cart, CartItem
 from utils.utils import set_activity_expiry
 
 
 @method_decorator(login_required, name='dispatch')
 class CartView(ListView):
-    model = CartItems
+    model = CartItem
     template_name = "cart/cart.html"
-    context_object_name = "cartitems"
+    context_object_name = "cart_items"
 
     def get(self, *args, **kwargs):
         if self.request.GET.get('q'):
@@ -34,9 +34,9 @@ class CartView(ListView):
 
 @method_decorator(login_required, name='dispatch')
 class CheckoutView(ListView):
-    model = CartItems
+    model = CartItem
     template_name = "checkout/chackout.html"
-    context_object_name = "cartitems"
+    context_object_name = "cart_items"
 
     def get(self, *args, **kwargs):
         if self.request.GET.get('q'):
@@ -56,7 +56,7 @@ class CheckoutView(ListView):
 
 @method_decorator(login_required, name='dispatch')
 class AddToCartView(CreateView):
-    model = CartItems
+    model = CartItem
     form_class = CartItemForm
 
     def get_success_url(self):
@@ -76,7 +76,7 @@ class AddToCartView(CreateView):
 
 @method_decorator(login_required, name='dispatch')
 class AddToCartDeleteView(DeleteView):
-    model = CartItems
+    model = CartItem
 
     def get_success_url(self):
         set_activity_expiry(self.request)

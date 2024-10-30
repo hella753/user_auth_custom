@@ -2,9 +2,8 @@ from django.conf import settings
 from django.db import models
 from user.models import User
 
+
 class Checkout(models.Model):
-    first_name = models.CharField("სახელი", max_length=100)
-    last_name = models.CharField("გვარი", max_length=100)
     order_address = models.CharField(max_length=100, verbose_name="მისამართი")
     city = models.CharField("ქალაქი", max_length=100)
     country = models.CharField("ქვეყანა", max_length=100)
@@ -36,7 +35,7 @@ class Cart(models.Model):
         return f"{self.user}"
 
 
-class CartItems(models.Model):
+class CartItem(models.Model):
     product = models.ForeignKey(
         "store.Product",
         on_delete=models.CASCADE,

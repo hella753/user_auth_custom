@@ -13,7 +13,7 @@
     {% endif %}
 
     {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'user:logout' %}">
+        <form method="GET" action="{% url 'user:logout' %}">
             {% csrf_token %}
             <div style="margin-left: 550px; margin-top: 20px">
                 თქვენ შესული ხართ სისტემაში როგორც {{ user.username }}.<br/>
