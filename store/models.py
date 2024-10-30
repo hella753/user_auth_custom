@@ -1,6 +1,5 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
-
 from django.conf import settings
 from versatileimagefield.fields import VersatileImageField
 
@@ -15,7 +14,6 @@ class Category(MPTTModel):
         verbose_name="ზეკატეგორია",
         related_name="children"
     )
-    # product_count = models.IntegerField(null=True, blank=True)
     slug = models.SlugField(default="", blank=True)
 
     class MPTTMeta:

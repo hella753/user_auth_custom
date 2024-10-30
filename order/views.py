@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, F
+from django.db.models import F
 from django.db.models.functions import Round
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, ListView
 from order.forms import CartItemForm
-from order.models import Cart, CartItem
+from order.models import CartItem
 from utils.utils import set_activity_expiry
 
 
@@ -81,4 +81,3 @@ class AddToCartDeleteView(DeleteView):
     def get_success_url(self):
         set_activity_expiry(self.request)
         return reverse_lazy("order:cart")
-

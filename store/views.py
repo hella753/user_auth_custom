@@ -130,4 +130,3 @@ class ProductView(DetailView):
         context["reviews"] = product_reviews
         context["quantity"] = quantity
         return context
-

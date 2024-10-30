@@ -14,26 +14,30 @@ def custom_context(request):
             ).select_related("user")
         )
         categories = Category.objects.annotate(
-            count=Count('product') + Count('children__product')
+            count=(Count('product') + Count('children__product'))
         ).filter(parent__isnull=True)
         cart_count = cart.aggregate(count=Count("cartitem")).get("count")
+
         if 'order' in request.META['PATH_INFO']:
             try:
-                queryset = CartItem.objects.annotate(
-                    total_price=Round(
-                        F("product_quantity") * F("product__product_price")
-                    )
-                ).filter(cart__user_id=request.user.id).select_related("product")
+                queryset = (
+                    CartItem.objects.annotate(
+                        total_price=Round(
+                            F("product_quantity") * F("product__product_price")
+                        )
+                    ).filter(
+                        cart__user_id=request.user.id
+                    ).select_related("product"))
 
                 subtotal = queryset.aggregate(
                     total=Sum("total_price")
                 ).get("total")
 
                 total = subtotal + cart.first().flat_rate
-
             except TypeError:
                 subtotal = 0
                 total = 0
+
             return {
                 "cart_count": cart_count,
                 "categories_root": categories,

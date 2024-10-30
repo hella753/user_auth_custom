@@ -1,9 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import CreateView, FormView
 from user.forms import RegistrationForm
 from utils.utils import set_activity_expiry
@@ -30,6 +28,7 @@ class Login(LoginView):
     def get_success_url(self):
         set_activity_expiry(self.request)
         return super().get_success_url()
+
 
 class Logout(FormView):
     success_url = reverse_lazy("user:login")

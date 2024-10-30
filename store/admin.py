@@ -1,6 +1,5 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
-
 from store.models import Category, Product
 from store.models import ProductReviews, ShopReviews, ProductTags
 
@@ -47,11 +46,11 @@ class PriceRangeFilter(admin.SimpleListFilter):
 
 @admin.register(Category)
 class CategoryAdmin(DraggableMPTTAdmin, admin.ModelAdmin):
-    list_display=(
+    list_display = (
         'tree_actions',
         'indented_title',
     )
-    list_display_links=(
+    list_display_links = (
         'indented_title',
     )
     list_filter = ('parent',)
@@ -61,7 +60,13 @@ class CategoryAdmin(DraggableMPTTAdmin, admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product_name', 'product_price', 'product_quantity', 'get_total_price')
+    list_display = (
+        'id',
+        'product_name',
+        'product_price',
+        'product_quantity',
+        'get_total_price'
+    )
     list_filter = [PriceRangeFilter]
     search_fields = ('product_name', 'product_category__category_name')
     list_per_page = 10
@@ -75,7 +80,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(ProductReviews)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'product', 'date')
-    search_fields = ('review', 'user__username')
+    search_fields = ('review',)
     list_per_page = 10
 
 

@@ -4,12 +4,6 @@ from user.models import User
 
 
 class Checkout(models.Model):
-    order_address = models.CharField(max_length=100, verbose_name="მისამართი")
-    city = models.CharField("ქალაქი", max_length=100)
-    country = models.CharField("ქვეყანა", max_length=100)
-    postcode = models.IntegerField("საფოსტო კოდი")
-    mobile = models.CharField("ტელეფონის ნომერი", max_length=100)
-    email = models.EmailField("მეილი", max_length=100)
     order_notes = models.TextField("შეკვეთის დეტალები", null=True, blank=True)
     order_date = models.DateField("შეკვეთის თარიღი", auto_now_add=True)
     product_cart = models.ForeignKey(
@@ -47,4 +41,3 @@ class CartItem(models.Model):
         on_delete=models.CASCADE,
         verbose_name="კალათა"
     )
-
