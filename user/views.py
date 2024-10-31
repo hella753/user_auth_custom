@@ -29,6 +29,12 @@ class Login(LoginView):
         set_activity_expiry(self.request)
         return super().get_success_url()
 
+    def get_redirect_url(self):
+        nxt = self.request.POST.get("next")
+        if nxt == "/order/add_to_cart/":
+            redirect_to = '/accounts/login/'
+            return redirect_to
+        return super().get_redirect_url()
 
 class Logout(FormView):
     success_url = reverse_lazy("user:login")
