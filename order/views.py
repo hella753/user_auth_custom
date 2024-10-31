@@ -4,45 +4,36 @@ from django.db.models.functions import Round
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView
+from mixins.search_mixin import SearchMixin
 from order.forms import CartItemForm
 from order.models import CartItem
 
 
-class CartView(LoginRequiredMixin, ListView):
+class CartView(LoginRequiredMixin, SearchMixin, ListView):
     model = CartItem
     template_name = "cart/cart.html"
     context_object_name = "cart_items"
-
-    def get(self, *args, **kwargs):
-        if self.request.GET.get('q'):
-            return redirect(f'/category/?q={self.request.GET.get('q')}')
-        return super().get(*args, **kwargs)
 
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.annotate(
             total_price=Round(
-                F("product_quantity")*F("product__product_price")
+                F("product_quantity") * F("product__product_price")
             )
         ).filter(cart__user_id=self.request.user.id)
         return queryset.select_related("product")
 
 
-class CheckoutView(LoginRequiredMixin, ListView):
+class CheckoutView(LoginRequiredMixin, SearchMixin, ListView):
     model = CartItem
     template_name = "checkout/chackout.html"
     context_object_name = "cart_items"
-
-    def get(self, *args, **kwargs):
-        if self.request.GET.get('q'):
-            return redirect(f'/category/?q={self.request.GET.get('q')}')
-        return super().get(*args, **kwargs)
 
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.annotate(
             total_price=Round(
-                F("product_quantity")*F("product__product_price")
+                F("product_quantity") * F("product__product_price")
             )
         ).filter(cart__user_id=self.request.user.id)
         return queryset.select_related("product")

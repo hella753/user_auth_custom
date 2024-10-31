@@ -3,10 +3,11 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView
+from mixins.search_mixin import SearchMixin
 from user.forms import RegistrationForm
 
 
-class RegistrationView(CreateView):
+class RegistrationView(SearchMixin, CreateView):
     form_class = RegistrationForm
     template_name = "registration/register.html"
     success_url = reverse_lazy("store:index")
@@ -20,7 +21,7 @@ class RegistrationView(CreateView):
             return super().form_valid(form)
 
 
-class Login(LoginView):
+class Login(SearchMixin, LoginView):
     template_name = 'registration/login.html'
 
     def get_success_url(self):

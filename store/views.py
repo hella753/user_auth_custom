@@ -1,20 +1,15 @@
 from django.db.models import Count
-from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView, TemplateView
+from mixins.search_mixin import SearchMixin
 from store.models import Product, ProductReviews
 from store.models import Category, ShopReviews, ProductTags
 
 
-class IndexView(ListView):
+class IndexView(SearchMixin, ListView):
     model = ShopReviews
     template_name = "homepage/index.html"
     queryset = ShopReviews.objects.select_related("user")
     context_object_name = "reviews"
-
-    def get(self, *args, **kwargs):
-        if self.request.GET.get('q'):
-            return redirect(f'/category/?q={self.request.GET.get('q')}')
-        return super().get(*args, **kwargs)
 
 
 class CategoryListingsView(ListView):
@@ -89,25 +84,16 @@ class CategoryListingsView(ListView):
         return context
 
 
-class ContactView(TemplateView):
+class ContactView(SearchMixin, TemplateView):
     template_name = "contact/contact.html"
 
-    def get(self, *args, **kwargs):
-        if self.request.GET.get('q'):
-            return redirect(f'/category/?q={self.request.GET.get('q')}')
-        return super().get(*args, **kwargs)
 
-
-class ProductView(DetailView):
+class ProductView(SearchMixin, DetailView):
     model = Product
     template_name = "product_detail/shop-detail.html"
     pk_url_kwarg = "id"
     queryset = Product.objects.prefetch_related("product_category", "tags")
 
-    def get(self, *args, **kwargs):
-        if self.request.GET.get('q'):
-            return redirect(f"/category/?q={self.request.GET.get('q')}")
-        return super().get(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
