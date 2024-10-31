@@ -4,7 +4,6 @@ from django.views.generic import DetailView, ListView, TemplateView
 from store.models import Product, ProductReviews
 from store.models import Category, ShopReviews, ProductTags
 from utils.context_processors import custom_context
-from utils.utils import set_activity_expiry
 
 
 class IndexView(ListView):
@@ -15,7 +14,6 @@ class IndexView(ListView):
 
     def get(self, *args, **kwargs):
         if self.request.GET.get('q'):
-            set_activity_expiry(self.request)
             return redirect(f'/category/?q={self.request.GET.get('q')}')
         return super().get(*args, **kwargs)
 
@@ -33,14 +31,12 @@ class CategoryListingsView(ListView):
         queryset = super().get_queryset()
 
         if self.request.GET.get('q'):
-            set_activity_expiry(self.request)
             queryset = queryset.filter(
                 product_name__icontains=self.request.GET.get('q')
             ).prefetch_related("tags")
 
         if self.request.GET.get('t') or self.request.GET.get('p'):
             tags = None
-            set_activity_expiry(self.request)
             if self.request.GET.get('t'):
                 tags = str(self.request.GET.get('t'))
 
@@ -52,7 +48,6 @@ class CategoryListingsView(ListView):
                 queryset = queryset.filter(tags=tags).prefetch_related("tags")
 
         if self.request.GET.get('fruitlist'):
-            set_activity_expiry(self.request)
             if self.request.GET.get('fruitlist') == "2":
                 queryset = queryset.order_by("product_price")
 
@@ -97,7 +92,6 @@ class ContactView(TemplateView):
 
     def get(self, *args, **kwargs):
         if self.request.GET.get('q'):
-            set_activity_expiry(self.request)
             return redirect(f'/category/?q={self.request.GET.get('q')}')
         return super().get(*args, **kwargs)
 
@@ -114,7 +108,6 @@ class ProductView(DetailView):
 
     def get(self, *args, **kwargs):
         if self.request.GET.get('q'):
-            set_activity_expiry(self.request)
             return redirect(f"/category/?q={self.request.GET.get('q')}")
         return super().get(*args, **kwargs)
 

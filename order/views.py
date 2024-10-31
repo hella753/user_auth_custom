@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView
 from order.forms import CartItemForm
 from order.models import CartItem
-from utils.utils import set_activity_expiry
 
 
 class CartView(LoginRequiredMixin, ListView):
@@ -16,7 +15,6 @@ class CartView(LoginRequiredMixin, ListView):
 
     def get(self, *args, **kwargs):
         if self.request.GET.get('q'):
-            set_activity_expiry(self.request)
             return redirect(f'/category/?q={self.request.GET.get('q')}')
         return super().get(*args, **kwargs)
 
@@ -37,7 +35,6 @@ class CheckoutView(LoginRequiredMixin, ListView):
 
     def get(self, *args, **kwargs):
         if self.request.GET.get('q'):
-            set_activity_expiry(self.request)
             return redirect(f'/category/?q={self.request.GET.get('q')}')
         return super().get(*args, **kwargs)
 
@@ -56,7 +53,6 @@ class AddToCartView(LoginRequiredMixin, CreateView):
     form_class = CartItemForm
 
     def get_success_url(self):
-        set_activity_expiry(self.request)
         return self.request.META.get('HTTP_REFERER', '')
 
     def form_valid(self, form):
@@ -74,5 +70,4 @@ class AddToCartDeleteView(LoginRequiredMixin, DeleteView):
     model = CartItem
 
     def get_success_url(self):
-        set_activity_expiry(self.request)
         return reverse_lazy("order:cart")

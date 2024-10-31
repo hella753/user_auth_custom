@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView
 from user.forms import RegistrationForm
-from utils.utils import set_activity_expiry
 
 
 class RegistrationView(CreateView):
@@ -16,7 +15,6 @@ class RegistrationView(CreateView):
         user = form.save()
         if user:
             login(self.request, user)
-            set_activity_expiry(self.request)
             return redirect(self.success_url)
         else:
             return super().form_valid(form)
@@ -26,7 +24,6 @@ class Login(LoginView):
     template_name = 'registration/login.html'
 
     def get_success_url(self):
-        set_activity_expiry(self.request)
         return super().get_success_url()
 
     def get_redirect_url(self):
