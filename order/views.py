@@ -1,17 +1,15 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F
 from django.db.models.functions import Round
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, ListView
 from order.forms import CartItemForm
 from order.models import CartItem
 from utils.utils import set_activity_expiry
 
 
-@method_decorator(login_required, name='dispatch')
-class CartView(ListView):
+class CartView(LoginRequiredMixin, ListView):
     model = CartItem
     template_name = "cart/cart.html"
     context_object_name = "cart_items"
@@ -32,8 +30,7 @@ class CartView(ListView):
         return queryset.select_related("product")
 
 
-@method_decorator(login_required, name='dispatch')
-class CheckoutView(ListView):
+class CheckoutView(LoginRequiredMixin, ListView):
     model = CartItem
     template_name = "checkout/chackout.html"
     context_object_name = "cart_items"
@@ -54,8 +51,7 @@ class CheckoutView(ListView):
         return queryset.select_related("product")
 
 
-@method_decorator(login_required, name='dispatch')
-class AddToCartView(CreateView):
+class AddToCartView(LoginRequiredMixin, CreateView):
     model = CartItem
     form_class = CartItemForm
 
@@ -74,8 +70,7 @@ class AddToCartView(CreateView):
         return redirect(self.request.META.get('HTTP_REFERER', ''))
 
 
-@method_decorator(login_required, name='dispatch')
-class AddToCartDeleteView(DeleteView):
+class AddToCartDeleteView(LoginRequiredMixin, DeleteView):
     model = CartItem
 
     def get_success_url(self):

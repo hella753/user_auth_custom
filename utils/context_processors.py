@@ -18,6 +18,11 @@ def custom_context(request):
         ).filter(parent__isnull=True)
         cart_count = cart.aggregate(count=Count("cartitem")).get("count")
 
+        context = {
+            "cart_count": cart_count,
+            "categories_root": categories,
+            "param": request.GET,
+        }
         if 'order' in request.META['PATH_INFO']:
             try:
                 queryset = (
@@ -37,17 +42,11 @@ def custom_context(request):
             except TypeError:
                 subtotal = 0
                 total = 0
-
-            return {
-                "cart_count": cart_count,
-                "categories_root": categories,
-                "param": request.GET,
-                "total": total,
-                "subtotal": subtotal,
-                "flat_rate": cart.first().flat_rate,
-            }
-        return {
-            "cart_count": cart_count,
-            "categories_root": categories,
-            "param": request.GET,
-        }
+            context.update(
+                {
+                    "total": total,
+                    "subtotal": subtotal,
+                    "flat_rate": cart.first().flat_rate
+                }
+            )
+        return context

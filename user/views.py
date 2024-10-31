@@ -36,6 +36,7 @@ class Login(LoginView):
             return redirect_to
         return super().get_redirect_url()
 
+
 class Logout(FormView):
     success_url = reverse_lazy("user:login")
 
