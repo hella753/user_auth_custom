@@ -18,7 +18,8 @@
             <p class="mb-0 pe-4">${{ total }}</p>
         </div>
         <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
-                type="button">Proceed Checkout
+                type="button">
+            <a href="{% url "order:checkout" %}">Proceed Checkout</a>
         </button>
     </div>
 </div>
