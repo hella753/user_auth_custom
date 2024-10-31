@@ -73,6 +73,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     mobile = models.CharField("ტელეფონის ნომერი", max_length=100, null=True, blank=True)
 
     last_active_datetime = models.DateTimeField(default=timezone.now)
+
     objects = UserManager()
 
     USERNAME_FIELD = "username"

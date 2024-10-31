@@ -23,6 +23,12 @@ def custom_context(request):
             "categories_root": categories,
             "param": request.GET,
         }
+
+        if 'product' in request.META['PATH_INFO']:
+            context.update({
+                "categories": categories
+            })
+
         if 'order' in request.META['PATH_INFO']:
             try:
                 queryset = (

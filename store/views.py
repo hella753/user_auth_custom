@@ -3,7 +3,6 @@ from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView, TemplateView
 from store.models import Product, ProductReviews
 from store.models import Category, ShopReviews, ProductTags
-from utils.context_processors import custom_context
 
 
 class IndexView(ListView):
@@ -17,12 +16,15 @@ class IndexView(ListView):
             return redirect(f'/category/?q={self.request.GET.get('q')}')
         return super().get(*args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
 
 class CategoryListingsView(ListView):
+    """
+    filters:
+    'q' -> search
+    't' -> tags
+    'p' -> price
+    'fruitlist' -> sorting
+    """
     model = Product
     template_name = "shop/shop.html"
     paginate_by = 6
@@ -95,10 +97,6 @@ class ContactView(TemplateView):
             return redirect(f'/category/?q={self.request.GET.get('q')}')
         return super().get(*args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
 
 class ProductView(DetailView):
     model = Product
@@ -118,8 +116,6 @@ class ProductView(DetailView):
         ).select_related("user")
         quantity = 1
 
-        request = custom_context(self.request)
-        context["categories"] = request.get("categories_root")
         context["reviews"] = product_reviews
         context["quantity"] = quantity
         return context
